@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title›WeatherApp </title></title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@1,300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head›
+<body>
+
+    <div class="card">
+       <div class="search">
+           <input type="text" placeholder="Enter your city name"
+           spellcheck="false">
+           <button><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 16 16" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10.442 10.442a1 1 0 011.415 0l3.85 3.85a1 1 0 01-1.414 1.415l-3.85-3.85a1 1 0 010-1.415z" clip-rule="evenodd"></path><path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 100-11 5.5 5.5 0 000 11zM13 6.5a6.5 6.5 0 11-13 0 6.5 6.5 0 0113 0z" clip-rule="evenodd"></path></svg></button>
+           
+
+       </div>
+
+       <div class="err">
+          <p>Please enter a valid city name</p>
+       </div>
+
+       <div class="weather">
+          <img src= "Weatherapp/sunny.png" class="weather-icon">
+          <h1 class="Temperature">20°C</h1>
+          <h2 class="City">Cluj-Napoca</h2>
+          <div class="details">
+             <div class="col">
+               <img src="Weatherapp/humidity.jpg">
+               <div>
+                  <p class="humidity">47% </p>
+                  <p>Humidity</p>
+            </div>
+          </div>
+          <div class="col">
+            <img src="Weatherapp/wind.png">
+            <div>
+               <p class="wind">15 km/hour </p>
+               <p>Wind Speed</p>
+            </div>
+         </div>
+       </div>
+     </div>
+    </div>
+
+<script> 
+
+const apiKey= "66573523937fc0151d0f908dbf6bff01";
+const apiUrl= "https://api.openweathermap.org/data/2.5/weather?&units=metric&q=";
+
+const searchBox = document.querySelector(".search input");
+const searchBtn = document.querySelector(".search button");
+const weatherIcon = document.querySelector(".weather-icon");
+
+
+async function checkWeather(city){
+    const response = await fetch(apiUrl + city +`&appid=${apiKey}`);
+if(response.status ==404){
+     document.querySelector(".err").style.display = "block";
+     document.querySelector("weather").style.display = "block";
+
+} else{
+
+
+
+    var data = await response.json();
+
+    
+
+    document.querySelector(".City").innerHTML = data.name;
+    document.querySelector(".Temperature").innerHTML = data.main.temp + "°C";
+    document.querySelector(".humidity").innerHTML = data.main.humidity + "%";
+    document.querySelector(".wind").innerHTML = data.wind.speed + "km/hour";
+
+
+    if(data.weather[0].main =="Clouds"){
+        weatherIcon.src = "Weatherapp/sunny.png" ;
+
+    }
+    else if(data.weather[0].main =="Clear"){
+        weatherIcon.src = "Weatherapp/sunny.png";
+    }
+     else if(data.weather[0].main =="Rain"){
+        weatherIcon.src = "Weatherapp/rain.jpg";
+    }
+     else if(data.weather[0].main =="Drizzle"){
+        weatherIcon.src = "Weatherapp/drizzle.png";
+    }
+    else if(data.weather[0].main =="mist"){
+        weatherIcon.src = "Weatherapp/mist.png";
+    }
+
+    document.querySelector(".weather").style.display = "block";
+
+}
+
+}
+
+
+
+
+searchBtn.addEventListener("click" , ()=>{
+    checkWeather(searchBox.value);
+    
+})
+
+
+
+
+</script>
+
+</body>
+</html>
